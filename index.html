@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>For My Favorite Person 💖</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --primary: #ff4d88;
+    --soft-pink: #fff0f6;
+    --glass: rgba(255, 255, 255, 0.88);
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+  
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(180deg, #fff5f8 0%, #ffd6e8 100%);
+    color: #333;
+    min-height: 100dvh;
+    overflow: hidden;
+  }
+
+  section {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100dvh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .hidden { opacity: 0; pointer-events: none; transform: scale(0.9); filter: blur(10px); }
+
+  .glass-card {
+    background: var(--glass);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 28px;
+    padding: 24px;
+    box-shadow: 0 15px 35px rgba(255, 77, 136, 0.15);
+    width: 100%;
+    max-width: 360px;
+    text-align: center;
+    position: relative;
+  }
+
+  h1, h2 { font-family: 'Dancing Script', cursive; color: var(--primary); margin: 0; }
+  h1 { font-size: 2.8rem; }
+  
+  .btn-premium {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 20px;
+    background: linear-gradient(45deg, #ff4d88, #ff85a1);
+    color: white;
+    font-weight: 800;
+    margin-top: 15px;
+    transition: transform 0.2s, left 0.2s, top 0.2s;
+    box-shadow: 0 8px 20px rgba(255, 77, 136, 0.25);
+  }
+  .btn-premium:active { transform: scale(0.95); }
+
+  /* Quiz Buttons */
+  .quiz-btn {
+    background: white;
+    border: 2px solid #ffecf2;
+    padding: 12px;
+    border-radius: 15px;
+    margin: 8px 0;
+    width: 100%;
+    font-weight: 600;
+    color: #555;
+  }
+
+  /* Gallery Grid */
+  .gallery-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0;
+  }
+  .photo-frame { background: #fff; padding: 4px; border-radius: 12px; transform: rotate(var(--r)); }
+  .photo-frame img { width: 100%; border-radius: 8px; display: block; }
+
+  /* Floating elements */
+  .floating-emoji { position: fixed; pointer-events: none; z-index: 999; animation: floatUp 2s forwards; }
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-150px) scale(1.5); opacity: 0; }
+  }
+
+  #complimentText { font-style: italic; color: var(--primary); margin-top: 10px; min-height: 40px; }
+</style>
+</head>
+<body>
+
+<section id="welcome">
+  <div class="glass-card">
+    <div style="font-size: 50px; animation: pulse 2s infinite;">💝</div>
+    <h1>Hi Tuttu...</h1>
+    <p>I made something special because you're my favorite person (even when you're annoying).</p>
+    <div style="position: relative; width: 100%; height: 80px;">
+      <button class="btn-premium" id="startBtn" onclick="goTo('lock')">Open Gift 🎁</button>
+    </div>
+  </div>
+</section>
+
+<section id="lock" class="hidden">
+  <div class="glass-card">
+    <h2>Access Granted? 🔒</h2>
+    <p>Sidhu's favorite thing starts with B... 😏</p>
+    <input type="text" id="answerInput" style="width:100%; padding:15px; border-radius:15px; border:2px solid #ffecf2; text-align:center;" placeholder="Answer here..." autocorrect="off">
+    <button class="btn-premium" onclick="checkAnswer()">Unlock 💖</button>
+    <p id="lockMessage" style="font-size: 0.8rem; margin-top: 10px;"></p>
+  </div>
+</section>
+
+<section id="quiz" class="hidden">
+  <div class="glass-card">
+    <h2>Vibe Check ✨</h2>
+    <p id="questionText">How much does Sidhu love you?</p>
+    <div id="quizOptions">
+        <button class="quiz-btn" onclick="wrongQuiz(this)">A little bit</button>
+        <button class="quiz-btn" onclick="wrongQuiz(this)">Enough</button>
+        <button class="quiz-btn" onclick="correctQuiz()">More than anyone in the world 🌎</button>
+    </div>
+  </div>
+</section>
+
+<section id="compliments" class="hidden">
+  <div class="glass-card">
+    <h2>Why I Love You ❤️</h2>
+    <p id="complimentText">Tap the button for a reason...</p>
+    <button class="btn-premium" onclick="generateCompliment()">Give me a reason! ✨</button>
+    <button class="quiz-btn" style="margin-top:20px; border-color:var(--primary)" onclick="goTo('letter')">That's enough, show me the letter! 🥰</button>
+  </div>
+</section>
+
+<section id="letter" class="hidden">
+  <div class="glass-card" style="text-align: left; max-height: 80vh; overflow-y: auto;">
+    <h2 style="text-align: center;">My Dearest Tuttu,</h2>
+    <p>I love the way you smile, the way you get annoyed, and even the way you pretend you don’t care.</p>
+    <p>I don’t promise perfection. But I promise effort. I promise choosing you, again and again.</p>
+    <p style="text-align: right; font-family: 'Dancing Script'; font-size: 1.6rem;">
+      Always yours,<br>
+      <span id="sidhuName" style="color: var(--primary); border-bottom: 2px solid #ff4d88;">Sidhu ❤️</span>
+    </p>
+  </div>
+  <button class="btn-premium" style="max-width: 360px;" onclick="goTo('gallery')">Our Memories 📸</button>
+</section>
+
+<section id="gallery" class="hidden">
+  <div class="glass-card">
+    <h2>Us.</h2>
+    <div class="gallery-grid">
+      <div class="photo-frame" style="--r:-2deg"><img src="us.jpg"></div>
+      <div class="photo-frame" style="--r:3deg"><img src="car.jpg"></div>
+      <div class="photo-frame" style="--r:-1deg"><img src="b1.jpg"></div>
+      <div class="photo-frame" style="--r:2deg"><img src="us2.jpg"></div>
+    </div>
+    <button class="btn-premium" onclick="goTo('video')">The Finale... 🎥</button>
+  </div>
+</section>
+
+<section id="video" class="hidden">
+  <div class="glass-card">
+    <h2>For You, Tuttu 💖</h2>
+    <video controls>
+      <source src="video.mp4" type="video/mp4">
+    </video>
+    <button class="btn-premium" onclick="sendHug()">Send Hug Back 🤗</button>
+  </div>
+</section>
+
+<script>
+  function goTo(id) {
+    document.querySelectorAll("section").forEach(s => s.classList.add("hidden"));
+    document.getElementById(id).classList.remove("hidden");
+  }
+
+  // 1. Runaway Button Easter Egg
+  const startBtn = document.getElementById('startBtn');
+  let moveCount = 0;
+  startBtn.addEventListener('touchstart', (e) => {
+    if (moveCount < 2) {
+        e.preventDefault();
+        startBtn.style.position = 'absolute';
+        startBtn.style.top = Math.random() * 50 + 'px';
+        startBtn.style.left = (Math.random() * 40 - 20) + 'px';
+        moveCount++;
+    }
+  });
+
+  // 2. Lock Logic
+  function checkAnswer() {
+    if (document.getElementById("answerInput").value.trim().toLowerCase() === "boobs") {
+      goTo('quiz');
+    } else {
+      document.getElementById("lockMessage").textContent = "Try again, cutie! 😜";
+    }
+  }
+
+  // 3. Quiz Logic
+  function wrongQuiz(btn) {
+    btn.style.textDecoration = "line-through";
+    btn.style.opacity = "0.5";
+    alert("Wrong answer! Try again. 🙄");
+  }
+  function correctQuiz() {
+    alert("Correct! You're the smartest. ❤️");
+    goTo('compliments');
+  }
+
+  // 4. Compliment Generator
+  const reasons = [
+    "The way your eyes look when you're happy 🥺",
+    "How you're the only person who can handle my nonsense.",
+    "Your smell (it's my favorite flavor) 🌸",
+    "The way you care for me even when I'm being difficult.",
+    "Because you're literally the prettiest girl in Bangalore.",
+    "Your tiny hands 🫶",
+    "The way you say my name."
+  ];
+  function generateCompliment() {
+    const text = document.getElementById('complimentText');
+    text.textContent = reasons[Math.floor(Math.random() * reasons.length)];
+    // Burst hearts
+    for(let i=0; i<5; i++) createHeart();
+  }
+
+  function createHeart() {
+    const el = document.createElement('div');
+    el.className = 'floating-emoji';
+    el.textContent = '💖';
+    el.style.left = Math.random() * 80 + 10 + 'vw';
+    el.style.top = '70vh';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 2000);
+  }
+
+  function sendHug() {
+    if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+    alert("🤗 Hug Sent! I love you so much, Tuttu.");
+  }
+
+  // Letter Easter Egg
+  document.getElementById('sidhuName').addEventListener('touchstart', (e) => {
+    for(let i=0; i<10; i++) setTimeout(createHeart, i * 100);
+  });
+</script>
+
+</body>
+</html>
